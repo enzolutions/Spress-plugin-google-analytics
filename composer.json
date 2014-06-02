@@ -1,0 +1,29 @@
+{
+    "name": "enzolutions/spress-plugin-google-analytics",
+    "type": "spress-plugin",
+    "description": "Enable add Google Analytics Tracker in your site",
+    "keywords": ["spress", "plugin", "seo", "analytics"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "enzo - Eduardo Garcia",
+            "email": "enzo@enzolutions.com",
+            "homepage": "http://enzolutions.com"
+        }
+    ],
+    "require": {
+        "yosymfony/spress-installer": "~1.0"
+    },
+    "extra": {
+        "spress_name": "Spress-plugin-google-analytics",
+        "spress_class": "SpressPlugins\\SpressGoogleAnalytics\\SpressGoogleAnalytics",
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "SpressPlugins\\SpressGoogleAnalytics\\": ""
+        }
+    }
+}
