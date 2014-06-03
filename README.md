@@ -1,3 +1,5 @@
+Spress Google Analytics is a plugin for <a target="_blank" href="http://spress.yosymfony.com/">Spress</a> to enable use Google Analytics as tracking system.
+
 ## How to install?
 
 Go to your Spress site and add the following to your `composer.json` and run
