@@ -2,16 +2,40 @@
 
 namespace SpressPlugins\SpressGoogleAnalytics;
 
-use Yosymfony\Spress\Plugin\Plugin;
-use Yosymfony\Spress\Plugin\EventSubscriber;
-use Yosymfony\Spress\Plugin\Event\EnviromentEvent;
-use Yosymfony\Spress\Plugin\Event\RenderEvent;
+use Yosymfony\Spress\Core\Plugin\PluginInterface;
+use Yosymfony\Spress\Core\Plugin\EventSubscriber;
+use Yosymfony\Spress\Core\Plugin\Event\EnvironmentEvent;
+use Yosymfony\Spress\Core\Plugin\Event\RenderEvent;
 
-class SpressGoogleAnalytics extends Plugin
+class SpressGoogleAnalytics implements PluginInterface
 {
+    protected $googleAnalyticsID;
+    protected $googleAnalyticsSite;
+
     public function initialize(EventSubscriber $subscriber)
     {
-      $subscriber->addEventListener('spress.after_render', 'onAfterRender');
+      $subscriber->addEventListener('spress.start', 'onStart');
+      $subscriber->addEventListener('spress.after_render_page', 'onAfterRender');
+    }
+
+    public function getMetas()
+    {
+        return [
+            'name' => 'enzolutions/spress-plugin-google-analytics',
+            'description' => 'Enable Google Analytics as tracking system.',
+            'author' => 'enzo - Eduardo Garcia',
+            'license' => 'MIT',
+        ];
+    }
+
+
+    public function onStart(EnvironmentEvent $event) {
+        $configValues = $event->getConfigValues();
+
+        if(isset($configValues['google_analytics'])) {
+            $this->googleAnalyticsID = $configValues['google_analytics']['id'];
+            $this->googleAnalyticsSite = $configValues['google_analytics']['site'];
+        }
     }
 
     public function onAfterRender(RenderEvent $event)
@@ -31,19 +55,18 @@ class SpressGoogleAnalytics extends Plugin
       </script>
       <!-- End of Google Analytics Tracker -->";
 
-      $payload = $event->getPayload();
 
       // Validate if Google Analytics settigns are available.
-      if(isset($payload['site']['google_analytics']['id']) && isset($payload['site']['google_analytics']['site'])) {
+      if(isset($this->googleAnalyticsID) && isset($this->googleAnalyticsSite)) {
         // Get content
         $content = $event->getContent();
 
         // Set google analytics variables
-        $ga_code = str_replace('GA_ID', $payload['site']['google_analytics']['id'], $ga_code);
-        $ga_code = str_replace('GA_SITE', $payload['site']['google_analytics']['site'], $ga_code);
+        $ga_code = str_replace('GA_ID', $this->googleAnalyticsID, $ga_code);
+        $ga_code = str_replace('GA_SITE', $this->googleAnalyticsSite, $ga_code);
 
         // Append Google Analytics code to end of page
-        $content = str_replace('</body>', $ga_code . "\n </body> ", $content);
+        $content= str_replace('</body>', $ga_code . "\n </body> ", $content);
         $event->setContent($content);
       }
     }

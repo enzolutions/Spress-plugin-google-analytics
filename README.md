@@ -7,7 +7,7 @@ Go to your Spress site and add the following to your `composer.json` and run
 
 ```
 "require": {
-    "enzolutions/spress-plugin-google-analytics": "1.0.*@dev"
+    "enzolutions/spress-plugin-google-analytics": "2.0.*@dev"
 }
 ```
 
